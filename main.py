@@ -5,6 +5,8 @@ from kivymd.app import MDApp
 from kivymd.theming import ThemableBehavior
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.list import OneLineIconListItem, MDList
+from kivymd.uix.screenmanager import MDScreenManager
+from kivymd.uix.screen import MDScreen
 
 KV = '''
 # Menu item in the DrawerList list.
@@ -17,6 +19,28 @@ KV = '''
         icon: root.icon
         theme_text_color: "Custom"
         text_color: root.text_color
+
+
+<MenuScreen>:
+    MDBoxLayout:
+        MDFlatButton:
+            font_size: 40
+            text: 'Goto settings'
+            on_press: root.manager.current = 'settings'
+        MDFlatButton:
+            font_size: 40
+            text: 'Quit'
+
+<SettingsScreen>:
+    MDBoxLayout:
+        MDFlatButton:
+            font_size: 40
+            text: 'My settings button'
+        MDFlatButton:
+            font_size: 40
+            text: 'Back to menu'
+            on_press: root.manager.current = 'menu'
+
 
 
 <ContentNavigationDrawer>:
@@ -59,11 +83,12 @@ MDScreen:
                     orientation: 'vertical'
 
                     MDTopAppBar:
-                        title: "Navigation Drawer"
+                        title: "Navigation"
                         elevation: 10
                         left_action_items: [['menu', lambda x: nav_drawer.set_state("open")]]
 
-                    Widget:
+                    Widget: 
+
 
 
         MDNavigationDrawer:
@@ -74,7 +99,14 @@ MDScreen:
 '''
 
 
+
 class ContentNavigationDrawer(MDBoxLayout):
+    pass
+
+class MenuScreen(MDScreen):
+    pass
+
+class SettingsScreen(MDScreen):
     pass
 
 
@@ -95,9 +127,13 @@ class DrawerList(ThemableBehavior, MDList):
         instance_item.text_color = self.theme_cls.primary_color
 
 
-class TestNavigationDrawer(MDApp):
+class Karpoolz(MDApp):
     def build(self):
-        return Builder.load_string(KV)
+        Builder.load_string(KV)
+        sm = MDScreenManager()
+        sm.add_widget(MenuScreen(name='menu'))
+        sm.add_widget(SettingsScreen(name='settings'))
+        return sm
 
     def on_start(self):
         icons_item = {
@@ -110,8 +146,9 @@ class TestNavigationDrawer(MDApp):
         }
         for icon_name in icons_item.keys():
             self.root.ids.content_drawer.ids.md_list.add_widget(
-                ItemDrawer(icon=icon_name, text=icons_item[icon_name])
+                ItemDrawer(icon=icon_name, text=icons_item[icon_name])  #Pronlem for some reason
             )
 
 
-TestNavigationDrawer().run()
+if __name__ == '__main__':
+    Karpoolz().run()
