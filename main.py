@@ -33,16 +33,11 @@ KV = '''
             id: avatar
             size_hint: None, None
             size: "56dp", "56dp"
-            source: "data/logo/kivy-icon-256.png"
+            source: "source/Karpoolz Logo 300X300.jpg"
 
     MDLabel:
-        text: "KivyMD library"
+        text: "Karpoolz"
         font_style: "Button"
-        adaptive_height: True
-
-    MDLabel:
-        text: "kivydevelopment@gmail.com"
-        font_style: "Caption"
         adaptive_height: True
 
     ScrollView:
