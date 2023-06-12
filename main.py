@@ -78,7 +78,7 @@ MDScreen:
         ScreenManager:
             id: screen_manager
 
-            MDScreen:
+            Screen:
 
                 MDBoxLayout:
                     orientation: 'vertical'
@@ -89,11 +89,20 @@ MDScreen:
                         left_action_items: [['menu', lambda x: nav_drawer.set_state("open")]]
 
                     Widget: 
-                        id: manager
-
                         MenuScreen:
                             name: "menu_screen"
 
+            Screen:
+
+                MDBoxLayout:
+                    orientation: 'vertical'
+
+                    MDTopAppBar:
+                        title: "Navigation"
+                        elevation: 10
+                        left_action_items: [['menu', lambda x: nav_drawer.set_state("open")]]
+
+                    Widget: 
                         SettingsScreen:
                             name: "settings_screen"
 
@@ -105,7 +114,7 @@ MDScreen:
             ContentNavigationDrawer:
                 id: content_drawer
 '''
-
+# the problem is in the transition, something with the functions
 
 
 class ContentNavigationDrawer(MDBoxLayout):
