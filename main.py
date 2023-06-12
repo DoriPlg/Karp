@@ -26,7 +26,7 @@ KV = '''
         MDFlatButton:
             font_size: 40
             text: 'Goto settings'
-            on_press: root.manager.current = 'settings'
+            on_press: root.switch_to_settings_screen()
         MDFlatButton:
             font_size: 40
             text: 'Quit'
@@ -39,7 +39,7 @@ KV = '''
         MDFlatButton:
             font_size: 40
             text: 'Back to menu'
-            on_press: root.manager.current = 'menu'
+            on_press: root.switch_to_menu_screen()
 
 
 
@@ -76,6 +76,7 @@ MDScreen:
     MDNavigationLayout:
 
         ScreenManager:
+            id: screen_manager
 
             MDScreen:
 
@@ -88,6 +89,13 @@ MDScreen:
                         left_action_items: [['menu', lambda x: nav_drawer.set_state("open")]]
 
                     Widget: 
+                        id: manager
+
+                        MenuScreen:
+                            name: "menu_screen"
+
+                        SettingsScreen:
+                            name: "settings_screen"
 
 
 
@@ -104,10 +112,14 @@ class ContentNavigationDrawer(MDBoxLayout):
     pass
 
 class MenuScreen(MDScreen):
-    pass
+    def switch_to_settings_screen(self):
+        screen_manager = self.parent.parent  # Access the MDScreenManager
+        screen_manager.current = "settings_screen"
 
 class SettingsScreen(MDScreen):
-    pass
+    def switch_to_menu_screen(self):
+        screen_manager = self.parent.parent  # Access the MDScreenManager
+        screen_manager.current = "menu_screen"
 
 
 class ItemDrawer(OneLineIconListItem):
@@ -129,11 +141,11 @@ class DrawerList(ThemableBehavior, MDList):
 
 class Karpoolz(MDApp):
     def build(self):
-        Builder.load_string(KV)
-        sm = MDScreenManager()
-        sm.add_widget(MenuScreen(name='menu'))
-        sm.add_widget(SettingsScreen(name='settings'))
-        return sm
+        kv = Builder.load_string(KV)
+        sm = kv.ids.screen_manager
+        sm.add_widget(MenuScreen(name='menu_screen'))
+        sm.add_widget(SettingsScreen(name='settings_screen'))
+        return kv
 
     def on_start(self):
         icons_item = {
@@ -146,9 +158,8 @@ class Karpoolz(MDApp):
         }
         for icon_name in icons_item.keys():
             self.root.ids.content_drawer.ids.md_list.add_widget(
-                ItemDrawer(icon=icon_name, text=icons_item[icon_name])  #Pronlem for some reason
+                ItemDrawer(icon=icon_name, text=icons_item[icon_name])
             )
-
 
 if __name__ == '__main__':
     Karpoolz().run()
